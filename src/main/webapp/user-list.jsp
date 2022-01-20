@@ -4,6 +4,10 @@
 <html>
 <head>
  <title>User Management Application</title>
+ <link rel="stylesheet"
+ href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+ crossorigin="anonymous">
 </head>
 <body>
  <center>
@@ -17,7 +21,7 @@
  </center>
     <div align="center">
         <table border="1" cellpadding="5">
-            <caption><h2>List of Users</h2></caption>
+            <h2>List of Users</h2>
             <tr>
                 <th>ID</th>
                 <th>Name</th>
@@ -32,9 +36,9 @@
                     <td><c:out value="${user.email}" /></td>
                     <td><c:out value="${user.country}" /></td>
                     <td>
-                     <a href="edit?id=<c:out value='${user.id}'/>">Edit</a>
+                     <a href="edit?id=<c:out value='${user.id}'/>" class="btn btn-success">Edit</a>
                      &nbsp;&nbsp;&nbsp;&nbsp;
-                     <a href="delete?id=<c:out value='${user.id}'/>">Delete</a>                     
+                     <a href="delete?id=<c:out value='${user.id}'/>" class="btn btn-danger">Delete</a>                     
                     </td>
                 </tr>
             </c:forEach>
