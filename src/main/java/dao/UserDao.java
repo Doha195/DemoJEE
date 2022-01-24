@@ -2,135 +2,134 @@ package dao;
 
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import Entities.User;
-import util.HibernateUtil;
+import util.JPAutil;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 public class UserDao {
 
 	/**
 	 * Save User
-	 * 
+	 *
 	 * @param user
 	 */
 	public void saveUser(User user) {
-		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-			transaction = session.beginTransaction();
-			// save the student object
-			session.save(user);
-			// commit transaction
+		EntityManager entityManager = JPAutil.entityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+
+		try {
+			transaction.begin();
+
+			entityManager.persist(user);
 			transaction.commit();
-		} catch (Exception e) {
-			if (transaction != null) {
-				 //transaction.rollback();
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
 			}
-			//e.printStackTrace();
+			entityManager.close();
 		}
+
 	}
 
 	/**
 	 * Update User
-	 * 
+	 *
 	 * @param user
 	 */
 	public void updateUser(User user) {
-		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-			transaction = session.beginTransaction();
-			// save the student object
-			session.update(user);
-			// commit transaction
+		EntityManager entityManager = JPAutil.entityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+
+		try {
+			transaction.begin();
+
+			entityManager.merge(user);
 			transaction.commit();
-		} catch (Exception e) {
-			if (transaction != null) {
-				 //transaction.rollback();
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
 			}
+			entityManager.close();
 		}
 	}
 
 	/**
 	 * Delete User
-	 * 
+	 *
 	 * @param id
+	 * @return
 	 */
-	public void deleteUser(int id) {
+	public boolean deleteUser(int id) {
 
-		Transaction transaction = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-			transaction = session.beginTransaction();
+		EntityManager entityManager = JPAutil.entityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
 
-			// Delete a user object
-			User user = session.get(User.class, id);
-			if (user != null) {
-				session.delete(user);
-				System.out.println("user is deleted");
-			}
-
-			// commit transaction
+			Query query = entityManager.createQuery("from User u where u.id = :id");
+			query.setParameter("id", id);
+			entityManager.remove(query.getResultList().get(0));
 			transaction.commit();
-		} catch (Exception e) {
-			if (transaction != null) {
-				 //transaction.rollback();
+			return  true;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
 			}
+			entityManager.close();
 		}
 	}
 
 	/**
-	 * Get User By ID
-	 * 
+	 * Get User
+	 *
 	 * @param id
 	 * @return
 	 */
 	public User getUser(int id) {
 
-		Transaction transaction = null;
-		User user = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-			transaction = session.beginTransaction();
-			// get an user object
-			user = session.get(User.class, id);
-			// commit transaction
+		EntityManager entityManager = JPAutil.entityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		try {
+			transaction.begin();
+
+			Query query = entityManager.createQuery("from User u where u.id = :id");
+			query.setParameter("id", id);
 			transaction.commit();
-		} catch (Exception e) {
-			if (transaction != null) {
-				 //transaction.rollback();
+			return (User) query.getResultList().get(0);
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
 			}
+			entityManager.close();
 		}
-		return user;
 	}
 
 	/**
 	 * Get all Users
-	 * 
+	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
 	public List<User> getAllUser() {
 
-		Transaction transaction = null;
-		List<User> listOfUser = null;
-		try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-			// start a transaction
-			transaction = session.beginTransaction();
-			// get an user object
+		EntityManager entityManager = JPAutil.entityManagerFactory().createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		List<User> UserList = null;
+		try {
+			transaction.begin();
 
-			listOfUser = session.createQuery("from User").getResultList();
-
-			// commit transaction
+			UserList = entityManager.createQuery("from User", User.class).getResultList();
 			transaction.commit();
-		} catch (Exception e) {
-			if (transaction != null) {
-				 //transaction.rollback();
-			}			
+			return UserList;
+		} finally {
+			if (transaction.isActive()) {
+				transaction.rollback();
+			}
+			entityManager.close();
 		}
-		return listOfUser;
-	}
 
+	}
 }

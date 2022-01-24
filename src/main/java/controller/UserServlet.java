@@ -97,7 +97,7 @@ public class UserServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		User newUser = new User(country, email, name);
 		userDao.saveUser(newUser);
-		response.sendRedirect("user-list.jsp");
+		response.sendRedirect("list");
 	}
 
 	private void updateUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
