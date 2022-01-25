@@ -5,22 +5,27 @@ import org.hibernate.Transaction;
 
 import Entities.Admin;
 import util.HibernateUtil;
+import util.JPAutil;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 public class AdminDao {
 	 public void saveUser(Admin admin) {
-	        Transaction transaction = null;
-	        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-	            // start a transaction
-	            transaction = session.beginTransaction();
-	            // save the student object
-	            session.save(admin);
-	            // commit transaction
-	            transaction.commit();
-	        } catch (Exception e) {
-	            if (transaction != null) {
-	                //transaction.rollback();
-	            }
-	        }
+		 EntityManager entityManager = JPAutil.entityManagerFactory().createEntityManager();
+		 EntityTransaction transaction = entityManager.getTransaction();
+
+		 try {
+			 transaction.begin();
+
+			 entityManager.persist(admin);
+			 transaction.commit();
+		 } finally {
+			 if (transaction.isActive()) {
+				 transaction.rollback();
+			 }
+			 entityManager.close();
+		 }
 	    }
 
 	    public boolean validate(String username, String password) {
