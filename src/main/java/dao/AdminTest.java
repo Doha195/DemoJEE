@@ -1,10 +1,8 @@
 package dao;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
 
 import Entities.Admin;
+import org.junit.jupiter.api.Test;
 
 public class AdminTest {
 
