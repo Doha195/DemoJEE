@@ -9,10 +9,10 @@
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
             <property name="packagesToScan" value="Entities"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/demo?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=Africa/Casablanca"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://app-db/myDB"/>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
-            <property name="javax.persistence.jdbc.password" value="0000"/>
+            <property name="javax.persistence.jdbc.password" value="password"/>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="hibernate.id.new_generator_mappings" value="false"/>
             <property name="hibernate.show_sql" value="true"/>
